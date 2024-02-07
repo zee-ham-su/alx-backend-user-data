@@ -9,7 +9,7 @@ import os
 import mysql.connector
 
 
-def filter_datum(fields: str, redaction: str, message: str,
+def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
     """returns the log message obfuscated"""
     for f in fields:
