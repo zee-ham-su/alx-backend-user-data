@@ -3,20 +3,12 @@
 Main file
 """
 
-import mysql.connector  # Import the MySQL connector module
+get_db = __import__('filtered_logger').get_db
 
-# Import the get_db function from filtered_logger module
-from filtered_logger import get_db
-
-try:
-    # Attempt to establish a database connection
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute("SELECT COUNT(*) FROM users;")
-    for row in cursor:
-        print(row[0])
-    cursor.close()
-    db.close()
-except mysql.connector.Error as err:
-    # Handle any errors that occur during the database connection process
-    print("Error connecting to the database:", err)
+db = get_db()
+cursor = db.cursor()
+cursor.execute("SELECT COUNT(*) FROM users;")
+for row in cursor:
+    print(row[0])
+cursor.close()
+db.close()
