@@ -67,3 +67,28 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     connection = mysql.connector.connect(user=user, password=password,
                                          host=host, database=database_name)
     return connection
+
+
+def main() -> None:
+    """Main function to retrieve data from
+    the database and log redacted fields."""
+    logger = get_logger()
+
+    # Obtain database connection
+    connection = get_db()
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM users")
+        rows = cursor.fetchall()
+        for row in rows:
+            formatted_row = "; ".join(
+                [f"{field}={value}" for field, value in zip(
+                    cursor.column_names, row)])
+            logger.info(formatted_row)
+    except mysql.connector.Error as err:
+        logger.error("Error retrieving data from database: %s", err)
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        connection.close()
