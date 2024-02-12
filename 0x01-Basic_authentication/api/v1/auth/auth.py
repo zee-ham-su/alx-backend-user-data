@@ -6,13 +6,22 @@ from typing import List, TypeVar
 
 
 class Auth():
-    """authentication class
-    """
+    """authentication class"""
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """ function that determines whether a
-        path needs an authentication or not
-        """
-        return (False)
+        """Determines whether a path needs authentication"""
+        if path is None:
+            return True
+        if not excluded_paths:
+            return True
+
+        for excluded_path in excluded_paths:
+            if path == excluded_path or path.startswith(excluded_path):
+                return False
+            if excluded_path.endswith('/') and path == excluded_path[:-1]:
+                return False
+
+        return True
 
     def authorization_header(self, request=None) -> str:
         """ gets the authentication header from the request
