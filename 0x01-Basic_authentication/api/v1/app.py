@@ -22,6 +22,7 @@ if auth_type == "basic_auth":
 else:
     auth = Auth()
 
+
 @app.before_request
 def before_request():
     """ to filter each request
@@ -41,8 +42,6 @@ def before_request():
             abort(403, description="Forbidden")
 
 
-
-
 @app.errorhandler(404)
 def not_found(error) -> str:
     """ Not found handler
@@ -55,6 +54,7 @@ def unauthorized(error) -> str:
     """ Unauthorized handler
     """
     return jsonify({"error": "Unauthorized"}), 401
+
 
 @app.errorhandler(403)
 def forbidden(error) -> str:
