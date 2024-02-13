@@ -66,7 +66,6 @@ class BasicAuth(Auth):
                     return us_er
             return None
         except Exception as e:
-            print(f"Error: {e}")
             return None
 
     def current_user(self, request=None) -> TypeVar('User'):
