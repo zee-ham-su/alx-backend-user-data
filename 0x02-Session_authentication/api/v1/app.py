@@ -34,13 +34,12 @@ def before_request():
         '/api/v1/unauthorized/', '/api/v1/forbidden/'
     ]
     if request.path in filtered_list:
-        pass
-    if auth.require_auth(request.path, filtered_list):
-        if auth.authorization_header(request) is None:
-            abort(401, description="Unauthorized")
-        request.current_user = auth.current_user(request)
-        if auth.current_user(request) is None:
-            abort(403, description="Forbidden")
+        if auth.require_auth(request.path, filtered_list):
+            if auth.authorization_header(request) is None:
+                abort(401, description="Unauthorized")
+            request.current_user = auth.current_user(request)
+            if auth.current_user(request) is None:
+                abort(403, description="Forbidden")
 
 
 @app.errorhandler(404)
