@@ -16,11 +16,11 @@ app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 auth = None
-auth_type = os.getenv("AUTH_TYPE")
-if auth_type == "basic_auth":
-    auth = BasicAuth()
-else:
+AUTH_TYPE = os.getenv("AUTH_TYPE")
+if AUTH_TYPE == "auth":
     auth = Auth()
+elif AUTH_TYPE == "basic_auth":
+    auth = BasicAuth()
 
 
 @app.before_request
@@ -28,17 +28,16 @@ def before_request():
     """ to filter each request
     """
     if auth is None:
-        return
-    filtered_list = [
-        '/api/v1/status/',
-        '/api/v1/unauthorized/', '/api/v1/forbidden/'
-    ]
-    if request.path in filtered_list:
+        pass
+    else:
+        filtered_list = ['/api/v1/status/',
+                         '/api/v1/unauthorized/', '/api/v1/forbidden/']
+
         if auth.require_auth(request.path, filtered_list):
             if auth.authorization_header(request) is None:
                 abort(401, description="Unauthorized")
             if auth.current_user(request) is None:
-                abort(403, description="Forbidden")
+                abort(403, description='Forbidden')
 
 
 @app.errorhandler(404)
