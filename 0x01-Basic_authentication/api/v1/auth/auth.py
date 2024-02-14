@@ -27,9 +27,9 @@ class Auth():
             elif excluded_path[-1] == "*":
                 if path.startswith(excluded_path[:-1]):
                     return False
-    
+
         return True
-    
+
     def authorization_header(self, request=None) -> str:
         """ gets the authentication header from the request
         """
