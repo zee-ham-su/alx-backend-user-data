@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-""" Module of Users views
+""" new Flask view that handles all routes
+for the Session authentication
 """
-import os
+from models.user import User
 from flask import jsonify, request
 from api.v1.views import app_views
-from models.user import User
+import os
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
