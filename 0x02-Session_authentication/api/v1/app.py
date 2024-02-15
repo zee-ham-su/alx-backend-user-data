@@ -33,6 +33,7 @@ def before_request():
     if auth is None:
         pass
     else:
+        setattr(request, "current_user", auth.current_user(request))
         filtered_list = ['/api/v1/status/',
                          '/api/v1/unauthorized/',
                          '/api/v1/forbidden/',
