@@ -1,43 +1,52 @@
 #!/usr/bin/env python3
 """session db auth module
 """
-from api.v1.auth.session_exp_auth import SessionExpAuth
 from datetime import datetime, timedelta
+from flask import request
 from models.user_session import UserSession
+from .session_exp_auth import SessionExpAuth
 
 
 class SessionDBAuth(SessionExpAuth):
-    def create_session(self, user_id=None):
-        """ create a session for a user_id
-        """
+    """Session authentication class """
+    def create_session(self, user_id=None) -> str:
+        """Creates a session id for the user."""
         session_id = super().create_session(user_id)
-        if session_id:
+        if isinstance(session_id, str):
             user_session = UserSession(user_id=user_id, session_id=session_id)
             user_session.save()
-        return session_id
+            return session_id
 
     def user_id_for_session_id(self, session_id=None):
-        """ return a user_id based on a session_id"""
-        if session_id:
-            user_session = UserSession.query.filter_by(
-                session_id=session_id).first()
-            if user_session:
-                if self.session_duration <= 0:
-                    return user_session.user_id
-                elif 'created_at' in user_session and \
-                     datetime.strptime(
-                         user_session.created_at, "%Y-%m-%d %H:%M:%S") + \
-                     timedelta(seconds=self.session_duration) > datetime.now():
-                    return user_session.user_id
-        return None
+        """Retrieves the user id of the user"""
+        try:
+            sessions = UserSession.search({'session_id': session_id})
+        except Exception:
+            return None
 
-    def destroy_session(self, request=None):
-        """ delete the user session"""
+        if not sessions:
+            return None
+
+        current_time = datetime.now()
+        session_lifetime = timedelta(seconds=self.session_duration)
+        expiration_time = sessions[0].created_at + session_lifetime
+
+        if expiration_time < current_time:
+            return None
+
+        return sessions[0].user_id
+
+    def destroy_session(self, request=None) -> bool:
+        """Destroys an authenticated session."""
         session_id = self.session_cookie(request)
-        if session_id:
-            user_session = UserSession.query.filter_by(
-                session_id=session_id).first()
-            if user_session:
-                user_session.delete()
-                return True
-        return False
+
+        try:
+            sessions = UserSession.search({'session_id': session_id})
+        except Exception:
+            return False
+
+        if not sessions:
+            return False
+
+        sessions[0].remove()
+        return True
