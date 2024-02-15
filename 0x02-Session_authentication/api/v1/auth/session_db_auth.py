@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 from models.user_session import UserSession
 
 
-
 class SessionDBAuth(SessionExpAuth):
     def create_session(self, user_id=None):
         """ create a session for a user_id
