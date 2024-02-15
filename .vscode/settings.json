@@ -3,7 +3,8 @@
         "fghij",
         "HOLBERTON",
         "jsonify",
-        "levelname"
+        "levelname",
+        "Usersession"
     ],
     "python.analysis.extraPaths": [
         "./0x02-Session_authentication"
