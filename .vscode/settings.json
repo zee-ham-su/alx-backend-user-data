@@ -4,5 +4,8 @@
         "HOLBERTON",
         "jsonify",
         "levelname"
+    ],
+    "python.analysis.extraPaths": [
+        "./0x02-Session_authentication"
     ]
 }
