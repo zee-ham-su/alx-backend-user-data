@@ -4,6 +4,7 @@
         "HOLBERTON",
         "jsonify",
         "levelname",
+        "sessionmaker",
         "Usersession"
     ],
     "python.analysis.extraPaths": [
