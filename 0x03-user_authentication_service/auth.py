@@ -36,8 +36,7 @@ class Auth:
         except NoResultFound:
             pass
         hashed_pwd = _hash_password(password)
-        uuid_str = _generate_uuid()
-        new_user = self._db.add_user(email, hashed_pwd, uuid_str)
+        new_user = self._db.add_user(email, hashed_pwd)
         return new_user
 
     def valid_login(self, email: str, password: str) -> bool:
