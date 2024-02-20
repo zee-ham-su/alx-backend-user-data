@@ -2,13 +2,6 @@
 """
 Main file
 """
-from auth import Auth
+from auth import _hash_password
 
-email = 'bob@bob.com'
-password = 'MyPwdOfBob'
-auth = Auth()
-
-auth.register_user(email, password)
-
-print(auth.create_session(email))
-print(auth.create_session("unknown@email.com"))
+print(_hash_password("Hello Holberton"))
