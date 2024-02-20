@@ -71,7 +71,7 @@ def logout():
 
 @app.route("/profile", methods=["GET"])
 def profile() -> str:
-    """ profile route
+    """ profile route for the user
     """
     session_id = request.cookies.get("session_id", None)
     if not session_id:
@@ -87,7 +87,7 @@ def profile() -> str:
 
 @app.route("/reset_password", methods=["POST"])
 def get_reset_password_token():
-    """ get reset password token
+    """ get reset password token of the user
     """
     email = request.form.get("email")
     try:
@@ -95,6 +95,24 @@ def get_reset_password_token():
         response = {
             "email": email,
             "reset_token": token
+        }
+        return jsonify(response)
+    except ValueError:
+        abort(403)
+
+
+@app.route("/reset_password", methods=["PUT"])
+def update_password() -> str:
+    """ update password of the user with reset token
+    """
+    email = request.form.get("email")
+    reset_token = request.form.get("reset_token")
+    new_password = request.form.get("new_password")
+    try:
+        AUTH.update_password(reset_token, new_password)
+        response = {
+            "email": email,
+            "message": "Password updated"
         }
         return jsonify(response)
     except ValueError:
