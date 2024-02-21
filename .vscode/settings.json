@@ -6,6 +6,7 @@
         "jsonify",
         "levelname",
         "sessionmaker",
+        "unlogged",
         "Usersession"
     ],
     "python.analysis.extraPaths": [
