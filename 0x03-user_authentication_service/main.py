@@ -14,7 +14,8 @@ def register_user(email: str, password: str) -> None:
     print("Server response:", server_response.status_code)
     print("Response content:", server_response.content.decode())
     assert server_response.status_code == 200
-    assert server_response.json() == {"email": email, "message": "user created"}
+    assert server_response.json() == {
+        "email": email, "message": "user created"}
     print("User registered")
 
 
@@ -93,12 +94,15 @@ def update_password(email: str, reset_token: str, new_password: str) -> None:
     """update_password function
     """
     endpoint = 'http://localhost:5000/reset_password'
-    data_request = {'email': email, 'reset_token': reset_token, 'new_password': new_password}
+    data_request = {
+        'email': email,
+        'reset_token': reset_token,
+        'new_password': new_password}
     server_response = requests.put(endpoint, data=data_request)
     print("Server response:", server_response.status_code)
     if server_response.status_code == 200:
-        assert server_response.json() == {"email": email, "message": "Password updated"}
-
+        assert server_response.json() == {
+            "email": email, "message": "Password updated"}
 
 
 EMAIL = "guillaume@holberton.io"
